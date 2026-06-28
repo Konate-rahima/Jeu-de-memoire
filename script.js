@@ -1,16 +1,20 @@
 const symbols = ["🍎", "🍌", "🍇", "🍒", "🍍", "🥝"];
 let cards = [...symbols, ...symbols];
 
-// mélange des cartes
+// mélange
 cards.sort(() => 0.5 - Math.random());
 
 const board = document.getElementById("gameBoard");
+const movesDisplay = document.getElementById("moves");
+const feedback = document.getElementById("feedback");
 
 let firstCard = null;
 let secondCard = null;
 let lockBoard = false;
 
-// création des cartes
+let moves = 0;
+
+// 🧱 création cartes
 cards.forEach(symbol => {
   const card = document.createElement("div");
   card.classList.add("card");
@@ -23,13 +27,12 @@ cards.forEach(symbol => {
     </div>
   `;
 
-  // 🔥 ICI : clic correct (IMPORTANT)
   card.addEventListener("click", flipCard);
 
   board.appendChild(card);
 });
 
-// 🔄 fonction flip
+// 🔄 flip
 function flipCard() {
   if (lockBoard) return;
   if (this === firstCard) return;
@@ -46,15 +49,20 @@ function flipCard() {
   checkMatch();
 }
 
-// 🧠 vérification des paires
+// 🧠 check match + score
 function checkMatch() {
+  moves++;
+  movesDisplay.textContent = moves;
+
   const isMatch =
     firstCard.dataset.symbol === secondCard.dataset.symbol;
 
   isMatch ? disableCards() : unflipCards();
+
+  updateFeedback();
 }
 
-// ✅ si match
+// ✅ match
 function disableCards() {
   firstCard.removeEventListener("click", flipCard);
   secondCard.removeEventListener("click", flipCard);
@@ -62,7 +70,7 @@ function disableCards() {
   resetBoard();
 }
 
-// ❌ si pas match
+// ❌ pas match
 function unflipCards() {
   lockBoard = true;
 
@@ -77,4 +85,20 @@ function unflipCards() {
 // 🔁 reset
 function resetBoard() {
   [firstCard, secondCard, lockBoard] = [null, null, false];
+}
+
+// 📊 feedback joueur
+function updateFeedback() {
+  if (moves <= 10) {
+    feedback.textContent = "🔥 Excellent !";
+    feedback.style.color = "lightgreen";
+  } 
+  else if (moves <= 20) {
+    feedback.textContent = "👍 Bien joué !";
+    feedback.style.color = "orange";
+  } 
+  else {
+    feedback.textContent = "😅 Tu peux t'améliorer !";
+    feedback.style.color = "red";
+  }
 }

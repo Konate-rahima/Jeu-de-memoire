@@ -13,7 +13,7 @@ body {
   margin-top: 30px;
 }
 
-/* 🧱 carte */
+/* 🧱 CARTE */
 .card {
   width: 100px;
   height: 100px;
@@ -21,7 +21,7 @@ body {
   cursor: pointer;
 }
 
-/* 🔄 animation flip */
+/* 🔄 FLIP ANIMATION */
 .card-inner {
   width: 100%;
   height: 100%;
@@ -30,12 +30,11 @@ body {
   transition: transform 0.5s ease;
 }
 
-/* quand la carte est retournée */
 .card.flip .card-inner {
   transform: rotateY(180deg);
 }
 
-/* faces */
+/* 🎭 FACES */
 .card-front,
 .card-back {
   width: 100%;
@@ -49,24 +48,18 @@ body {
   backface-visibility: hidden;
 }
 
-/* dos visible au départ */
 .card-front {
   background: #444;
 }
 
-/* face avec symbole */
 .card-back {
   background: orange;
   transform: rotateY(180deg);
 }
 
-/* effet hover léger */
-.card:hover {
-  transform: scale(1.05);
-  transition: 0.2s;
-}
-
-/* 🚫 NOUVEAU : bloque les clics pendant animation */
-.locked {
-  pointer-events: none;
+/* 📊 FEEDBACK SCORE */
+#feedback {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
 }
