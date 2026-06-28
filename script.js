@@ -1,18 +1,27 @@
 const symbols = ["🍎", "🍌", "🍇", "🍒", "🍍", "🥝"];
 let cards = [...symbols, ...symbols];
 
-// mélange
 cards.sort(() => 0.5 - Math.random());
 
 const board = document.getElementById("gameBoard");
+
+// score
 const movesDisplay = document.getElementById("moves");
 const feedback = document.getElementById("feedback");
+
+// timer
+const timerDisplay = document.getElementById("timer");
 
 let firstCard = null;
 let secondCard = null;
 let lockBoard = false;
 
 let moves = 0;
+
+// ⏱️ timer
+let time = 0;
+let timerStarted = false;
+let timerInterval = null;
 
 // 🧱 création cartes
 cards.forEach(symbol => {
@@ -36,6 +45,12 @@ cards.forEach(symbol => {
 function flipCard() {
   if (lockBoard) return;
   if (this === firstCard) return;
+
+  // ⏱️ start timer au 1er coup
+  if (!timerStarted) {
+    startTimer();
+    timerStarted = true;
+  }
 
   this.classList.add("flip");
 
@@ -68,6 +83,8 @@ function disableCards() {
   secondCard.removeEventListener("click", flipCard);
 
   resetBoard();
+
+  checkWin();
 }
 
 // ❌ pas match
@@ -100,5 +117,28 @@ function updateFeedback() {
   else {
     feedback.textContent = "😅 Tu peux t'améliorer !";
     feedback.style.color = "red";
+  }
+}
+
+// ⏱️ démarrer timer
+function startTimer() {
+  timerInterval = setInterval(() => {
+    time++;
+    timerDisplay.textContent = time;
+  }, 1000);
+}
+
+// 🏆 victoire + arrêt timer
+function checkWin() {
+  const allCards = document.querySelectorAll(".card");
+
+  const matchedCards = document.querySelectorAll(".card.flip");
+
+  if (matchedCards.length === allCards.length) {
+    clearInterval(timerInterval);
+
+    setTimeout(() => {
+      alert(`🎉 Bravo ! Tu as gagné en ${time} secondes et ${moves} coups !`);
+    }, 300);
   }
 }
